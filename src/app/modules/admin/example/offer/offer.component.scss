@@ -1,0 +1,19 @@
+.product-table{
+    input{
+        width: 100%;
+        border: 1px solid #ddd;
+        border-radius: 10px;
+        padding: 5px 10px;
+    }
+    td{
+        text-align: center;
+        padding-left: inherit !important;
+
+    }
+    th{
+        padding: 0 10px;
+        width: 300px;
+        text-align: center;
+       
+    }
+}

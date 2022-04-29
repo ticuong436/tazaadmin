@@ -1,0 +1,254 @@
+<div class="w-full relative">
+    <mat-drawer-container
+        class="example-container w-full"
+        autosize
+        [hasBackdrop]="false"
+    >
+        <mat-drawer
+            #drawer
+            class="example-sidenav fixed"
+            mode="side"
+            position="end"
+        >
+            <div class="h-full overflow-hidden relative" style="width: 450px">
+                <form class="mx-4 w-96 pt-10" [formGroup]="offerForm">
+                    <mat-form-field
+                        class="fuse-mat-emphasized-affix w-full"
+                        appearance="fill"
+                    >
+                        <span matPrefix>Sản phẩm</span>
+                        <mat-select
+                        [formControlName]="'tenProduct'"
+
+                        >
+                            <mat-option
+                                [value]="item.name"
+                                *ngFor="let item of products; let i=index"
+                                (click)="onSelect(item)"
+                                >{{ item.name ? item.name : "" }}</mat-option
+                            >
+                        </mat-select>
+                    </mat-form-field>
+              
+                    <mat-form-field
+                        class="fuse-mat-emphasized-affix w-full"
+                        appearance="fill"
+                    >
+                        <span matPrefix>Vertical</span>
+                        <input
+                            matInput
+                            placeholder="Mỹ phẩm phù hợp cho da dầu & da mụn"
+                            name="title"
+                            [formControlName]="'vertical'"
+                        />
+                    </mat-form-field>
+                    <mat-form-field
+                        class="fuse-mat-emphasized-affix w-full"
+                        appearance="fill"
+                    >
+                        <span matPrefix>GEO</span>
+                        <input
+                            matInput
+                            placeholder="Vietnam (VN)"
+                            name="title"
+                            [formControlName]="'geo'"
+                        />
+                    </mat-form-field>
+
+                    <mat-form-field
+                        class="fuse-mat-emphasized-affix w-full"
+                        appearance="fill"
+                    >
+                        <span matPrefix>Target</span>
+                        <input
+                            matInput
+                            placeholder=""
+                            name="title"
+                            [formControlName]="'target'"
+                        />
+                    </mat-form-field>
+
+                    <mat-form-field
+                        class="fuse-mat-emphasized-affix w-full"
+                        appearance="fill"
+                    >
+                        <span matPrefix>Promotion Price</span>
+                        <input
+                            matInput
+                            placeholder="Mỹ phẩm phù hợp cho da dầu & da mụn"
+                            name="title"
+                            [formControlName]="'promotion'"
+                        />
+                    </mat-form-field>
+
+                    <mat-form-field
+                        class="fuse-mat-emphasized-affix w-full"
+                        appearance="fill"
+                    >
+                        <span matPrefix>Payout</span>
+                        <input
+                            matInput
+                            placeholder="Mỹ phẩm phù hợp cho da dầu & da mụn"
+                            name="title"
+                            [formControlName]="'payout'"
+                        />
+                    </mat-form-field>
+                   
+
+                    <div class="form-group py-5">
+                        <button
+                            type="submit"
+                            class="btn btn-success bg-green-500 px-4 py-1 text-white rounded-2xl"
+                            (click)="drawer.toggle() &&  onSubmit()"
+                            [disabled]="!offerForm.valid"
+                        >
+                            Submit
+                        </button>
+
+                        <button
+                            type="update"
+                            class="btn bg-blue-500 px-4 py-1 text-white rounded-2xl mx-10"
+                            (click)="drawer.toggle() && updateOffer()"
+                            [ngClass]="{ hidden: !showEdit }"
+                        >
+                            Update
+                        </button>
+
+                        <button
+                            type="delete"
+                            class="btn btn-success bg-red-500 px-4 py-1 text-white rounded-2xl"
+                            (click)="drawer.toggle() &&  deleteOffer()"
+                            [ngClass]="{ hidden: !showEdit }"
+                        >
+                            Delete
+                        </button>
+                    </div>
+                </form>
+                <button
+                    class="absolute bg-gray-100 px-2 hover:bg-gray-300 py-1 rounded-full top-4 right-4"
+                    (click)="drawer.toggle() && !showEdit"
+                >
+                    X
+                </button>
+            </div>
+        </mat-drawer>
+
+        <div class="example-sidenav-content">
+            <button
+                class="py-2 px-4 bg-green-500 rounded-2xl relative text-white"
+                type="button"
+                (click)="drawer.toggle() && resetForm()"
+            >
+                <span class="px-1 rounded-full bg-white text-green-500">+</span>
+                Tạo Mới
+            </button>
+            <div class="mat-elevation-z8 w-full pt-5">
+                <table
+                    mat-table
+                    [dataSource]="dataSource"
+                    matSort
+                    class="w-full product-table"
+                >
+                    <!-- ID Column -->
+                    <ng-container matColumnDef="id">
+                        <th mat-header-cell *matHeaderCellDef mat-sort-header >
+                            ID
+                        </th>
+                        <td mat-cell *matCellDef="let row">{{ row.id }}</td>
+                    </ng-container>
+
+                    <!-- Progress Column -->
+                    <ng-container matColumnDef="product">
+                        <th mat-header-cell *matHeaderCellDef>
+                            <input
+                                (keyup)="applyFilter($event)"
+                                placeholder="Sản phẩm"
+                                #input
+                            />
+                        </th>
+                        <td mat-cell *matCellDef="let row">
+                            {{ row.TenSP }}
+                        </td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="categories">
+                        <th mat-header-cell *matHeaderCellDef>
+                            <input
+                                (keyup)="applyFilter($event)"
+                                placeholder="Danh mục"
+                                #input
+                            />
+                        </th>
+                        <td mat-cell *matCellDef="let row">{{ row.TenDM }}</td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="vertical">
+                        <th mat-header-cell *matHeaderCellDef>Vertical</th>
+                        <td mat-cell *matCellDef="let row">{{row.vertical}}</td>
+                    </ng-container>
+                    <ng-container matColumnDef="geo">
+                        <th mat-header-cell *matHeaderCellDef>GEO</th>
+                        <td mat-cell *matCellDef="let row">{{row.geo}}</td>
+                    </ng-container>
+                    <ng-container matColumnDef="target">
+                        <th mat-header-cell *matHeaderCellDef>Target</th>
+                        <td mat-cell *matCellDef="let row">{{row.target}}</td>
+                    </ng-container>
+                    <ng-container matColumnDef="promotion">
+                        <th mat-header-cell *matHeaderCellDef>Promotion Price</th>
+                        <td mat-cell *matCellDef="let row">{{row.promotion | currency:'VND'}}</td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="payout">
+                        <th mat-header-cell *matHeaderCellDef>Payout</th>
+                        <td mat-cell *matCellDef="let row">{{row.payout | currency:'VND'}}</td>
+
+                    </ng-container>
+                    <ng-container matColumnDef="action">
+                        <th mat-header-cell *matHeaderCellDef></th>
+                        <td mat-cell *matCellDef="let row">
+                            <button
+                                class="text-blue-400 flex items-center"
+                                (click)="drawer.toggle()"
+                                (click)="selectId(row.id)"
+                                (click)="getOfferchitiet()"
+                            >
+                                <span class="material-icons text-lg mr-2">
+                                    edit
+                                </span>
+                                Edit
+                            </button>
+                        </td>
+                    </ng-container>
+                    <!-- <ng-container matColumnDef="action">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header></th>
+                <td mat-cell *matCellDef="let row">
+                    <button
+                        class="px-4 py-1 rounded-2xl bg-blue-700 text-white"
+                    >
+                        Create Flow
+                    </button>
+                </td>
+            </ng-container> -->
+                    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                    <tr
+                        mat-row
+                        *matRowDef="let row; columns: displayedColumns"
+                    ></tr>
+
+                    <!-- Row shown when there is no matching data. -->
+                    <!-- <tr class="mat-row" *matNoDataRow>
+                <td class="mat-cell" colspan="4">
+                    No data matching the filter "{{ input.value }}"
+                </td>
+            </tr> -->
+                </table>
+
+                <mat-paginator
+                    [pageSizeOptions]="[5, 10, 25, 100]"
+                    aria-label="Select page of users"
+                ></mat-paginator>
+            </div>
+        </div>
+    </mat-drawer-container>
+</div>

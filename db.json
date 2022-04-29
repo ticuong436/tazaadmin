@@ -1,0 +1,69 @@
+{
+  "danhmuc": [
+    {
+      "name": "Da dầu và da mụn",
+      "image": "",
+      "parentId": 0,
+      "id": 1,
+      "img": ""
+    },
+    {
+      "name": "saaaaaaa",
+      "image": "",
+      "parentId": 0,
+      "id": 2
+    },
+    {
+      "name": "ssssssss",
+      "image": "",
+      "parentId": 0,
+      "id": 3
+    }
+  ],
+  "sanpham": [
+    {
+      "name": "DNA Sharyn",
+      "des": "Phù hợp da dầu da mun",
+      "status": "",
+      "slug": "dna",
+      "price": "2000000",
+      "image": "https://firebasestorage.googleapis.com/v0/b/sharyn.appspot.com/o/files%2F4.png?alt=media&token=0a906604-5fa3-49c9-a3f3-f379ce8bf5c5",
+      "idDM": 1,
+      "id": 1,
+      "danhmuc": "Da dầu và da mụn"
+    },
+    {
+      "name": "sssssssss",
+      "des": "",
+      "status": "",
+      "slug": "",
+      "price": 0,
+      "image": "",
+      "idDM": 1,
+      "id": 2
+    }
+  ],
+  "offer": [
+    {
+      "idP": 1,
+      "vertical": "abaaa",
+      "geo": "sssss",
+      "target": "sssss",
+      "promotion": "2000000",
+      "payout": "200000000",
+      "id": 1
+    }
+  ],
+  "flow": [
+    {
+      "idOffer": 1,
+      "name": "cường",
+      "landingpage": "1",
+      "traffic": "instagram",
+      "link": "",
+      "code": "a358f23e",
+      "createAt": "2022-4-29 9:21:28",
+      "id": 1
+    }
+  ]
+}
