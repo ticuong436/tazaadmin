@@ -125,6 +125,7 @@
                             type="submit"
                             class="btn btn-success bg-green-500 px-4 py-1 text-white rounded-2xl"
                             (click)="drawer.toggle() &&  onSubmit()"
+                            *ngIf="showSubmit"
                             [disabled]="!productForm.valid"
                         >
                             Submit
@@ -132,7 +133,7 @@
 
                         <button
                             type="update"
-                            class="btn bg-blue-500 px-4 py-1 text-white rounded-2xl mx-10"
+                            class="btn bg-blue-500 px-4 py-1 text-white rounded-2xl mr-10"
                             (click)="drawer.toggle() && updateSanpham()"
                             [ngClass]="{ hidden: !showEdit }"
                         >
@@ -151,7 +152,7 @@
                 </form>
                 <button
                     class="absolute bg-gray-100 px-2 hover:bg-gray-300 py-1 rounded-full top-4 right-4"
-                    (click)="drawer.toggle() && !showEdit"
+                    (click)="drawer.toggle() && showSubmit = false"
                 >
                     X
                 </button>
@@ -162,7 +163,7 @@
             <button
                 class="py-2 px-4 bg-green-500 rounded-2xl relative text-white"
                 type="button"
-                (click)="drawer.toggle() && resetForm()"
+                (click)="  drawer.toggle()  && resetForm() "
             >
                 <span class="px-1 rounded-full bg-white text-green-500">+</span>
                 Tạo Mới

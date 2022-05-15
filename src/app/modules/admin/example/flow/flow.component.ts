@@ -3,10 +3,11 @@ import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
-import { map } from 'rxjs';
 import { FlowService } from './flow.service';
 import { Flow } from './flow.types';
-import { CurrencyPipe } from '@angular/common';
+import {LandingpageService} from '../landingpage/landingpage.service'
+import { Landingpage } from '../landingpage/landingpage.types';
+
 import { OfferService } from '../offer/offer.service';
 import { SanphamService } from '../sanpham/sanpham.service';
 import { Offer } from '../offer/offer.types';
@@ -29,14 +30,17 @@ export class FlowComponent implements AfterViewInit, OnInit {
     flowForm: FormGroup;
     offers: Offer[];
     flow: Flow[];
+    landingpage: Landingpage[];
     selectID;
     traffic = [{ social: 'facebook' }, { social: 'instagram' }];
     products: any;
     selectedFiles?: FileList;
+    link='';
     percentage = 0;
     showEdit = false;
     dataSource: MatTableDataSource<Flow>;
     showFiller = false;
+    showSubmit = false;
     @ViewChild(MatPaginator) paginator: MatPaginator;
     @ViewChild(MatSort) sort: MatSort;
 
@@ -44,7 +48,8 @@ export class FlowComponent implements AfterViewInit, OnInit {
         private fb: FormBuilder,
         private offerService: OfferService,
         private flowService: FlowService,
-        private productService: SanphamService
+        private productService: SanphamService,
+        private ladingpageService: LandingpageService
     ) {
         // Create 100 users
         // const users = Array.from({ length: 10 }, (_, k) =>
@@ -63,14 +68,26 @@ export class FlowComponent implements AfterViewInit, OnInit {
     }
     onSelect(item) {
         this.flowForm.get('idOffer').setValue(item.id);
+        this.ladingpageService.landingpage$.subscribe(res=>{
+           this.landingpage =  res.filter(x=> x.idOffer == item.id)
+           console.log(this.landingpage);
+           
+        })
+    }
+    onSelectLink(item){
+
+        this.link = item.link
     }
     getFlowchitiet() {
+        this.showSubmit = false
+
         this.flowService.getFLowchitiet(this.selectID).subscribe((res) => {
             this.flowForm.get('idOffer').setValue(res.idOffer);
-            let tenProduct = this.products.find(
+            let tenProduct = this.products?.find(
                 (x) => x.id == res.idOffer
-            )?.name;
-            this.flowForm.get('tenProduct').setValue(tenProduct);
+            );
+            // let link = this.landingpage.find(x => x.idOffer)
+            this.flowForm.get('TenSP').setValue(tenProduct?.name);
             this.flowForm.get('name').setValue(res.name);
             this.flowForm.get('link').setValue(res.link);
             this.flowForm.get('landingpage').setValue(res.landingpage);
@@ -81,13 +98,16 @@ export class FlowComponent implements AfterViewInit, OnInit {
     deleteFlow() {
         this.flowService.deleteFlow(this.selectID).subscribe();
         this.resetForm();
+        this.flowForm.removeControl('TenSP');
+
     }
     updateFlow() {
         this.flowForm.addControl('id', new FormControl(this.selectID));
         this.flowForm.get('id').setValue(this.selectID);
-        this.flowForm.removeControl('tenProduct');
         this.flowService.updateFlow(this.flowForm.value).subscribe();
         this.resetForm();
+        this.flowForm.removeControl('TenSP');
+
         this.ngOnInit();
     }
 
@@ -100,6 +120,8 @@ export class FlowComponent implements AfterViewInit, OnInit {
         }
     }
     resetForm() {
+        this.showSubmit = true
+        this.showEdit = false
         this.flowForm = this.fb.group({
             idOffer: [0],
             name: [''],
@@ -109,6 +131,8 @@ export class FlowComponent implements AfterViewInit, OnInit {
         });
     }
     onSubmit() {
+
+        
         var today = new Date();
 
         var date =
@@ -127,14 +151,18 @@ export class FlowComponent implements AfterViewInit, OnInit {
 
         var dateTime = date + ' ' + time;
         this.flowForm.removeControl('id');
+        this.flowForm.removeControl('TenSP');
         this.flowForm.addControl('code', new FormControl(''));
-        this.flowForm.get('code').setValue(uuidv4().substring(0, 8));
+        let code = uuidv4().substring(0, 8)
+        this.flowForm.get('code').setValue(code);
+        this.flowForm.get('link').setValue(`${this.link}#${code}`);
         this.flowForm.addControl('createAt', new FormControl(''));
         this.flowForm.get('createAt').setValue(dateTime);
 
         this.flowService.postFlow(this.flowForm.value).subscribe();
         alert('tạo thành công');
         this.resetForm();
+        
     }
 
     ngOnInit(): void {
@@ -142,6 +170,7 @@ export class FlowComponent implements AfterViewInit, OnInit {
         this.productService.sanpham$.subscribe((res) => {
             return (this.products = res);
         });
+        this.ladingpageService.getLandingpage().subscribe()
         this.offerService.getoffer().subscribe();
         this.offerService.offer$.subscribe((res) => {
             res?.forEach((v) => {
@@ -154,9 +183,12 @@ export class FlowComponent implements AfterViewInit, OnInit {
         this.flowService.getFlow().subscribe();
         this.flowService.flow$.subscribe((res) => {
             res?.forEach((v) => {
-                let a = this.offers.find((x) => x.id == v.idOffer);
-                let b = this.products.find((x) => x.id == a.idP);
+                let a = this.offers?.find((x) => x.id == v.idOffer);
+               if(a && a.idP){
+                let b = this.products?.find((x) => x.id == a.idP);
                 v.TenSP = b?.name;
+               }
+               
             });
 
             this.dataSource = new MatTableDataSource(res);
@@ -166,9 +198,10 @@ export class FlowComponent implements AfterViewInit, OnInit {
             return (this.flow = res);
         });
         this.flowForm = this.fb.group({
-            tenProduct: [''],
+         
             idOffer: [0],
             name: [''],
+            TenSP: [''],
             link: [''],
             landingpage: [''],
             traffic: [''],

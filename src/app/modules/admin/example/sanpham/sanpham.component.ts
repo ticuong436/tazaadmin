@@ -4,7 +4,6 @@ import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { SanphamService } from './sanpham.service';
 import { Sanpham } from './sanpham.types';
-import { OverlayModule } from '@angular/cdk/overlay';
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { FileUpload } from '../../models/file-upload.model';
 import { FileUploadService } from '../../service/file-upload.service';
@@ -40,6 +39,7 @@ export class SanphamComponent implements AfterViewInit, OnInit {
     percentage = 0;
     danhmuc: any;
     showEdit = false;
+    showSubmit = false;
 
     constructor(
         private sanphamService: SanphamService,
@@ -78,6 +78,8 @@ export class SanphamComponent implements AfterViewInit, OnInit {
         this.productForm.get('idDM').setValue(item.id);
     }
     getSanphamchitiet() {
+        this.showSubmit = false
+
         this.sanphamService
             .getSanphamchitiet(this.selectID)
             .subscribe((res) => {
@@ -89,6 +91,7 @@ export class SanphamComponent implements AfterViewInit, OnInit {
                 this.productForm.get('des').setValue(res.des);
                 this.productForm.get('status').setValue(res.status);
                 this.productForm.get('slug').setValue(res.slug);
+                this.productForm.get('image').setValue(res.image);
 
                 this.productForm.get('price').setValue(res.price);
                 this.productForm.get('idDM').setValue(res.idDM);
@@ -96,13 +99,19 @@ export class SanphamComponent implements AfterViewInit, OnInit {
     }
     deleteSanpham() {
         this.sanphamService.deleteSanpham(this.selectID).subscribe();
+
         this.resetForm();
+        this.productForm.removeControl('danhmuc');
+
     }
     updateSanpham() {
         this.productForm.addControl('id', new FormControl(this.selectID));
         this.productForm.get('id').setValue(this.selectID);
+        
         this.sanphamService.updateSanpham(this.productForm.value).subscribe();
         this.resetForm();
+        this.productForm.removeControl('danhmuc');
+
         this.ngOnInit();
     }
 
@@ -116,11 +125,13 @@ export class SanphamComponent implements AfterViewInit, OnInit {
             price: [0],
             image: [''],
         });
+        this.showSubmit = true
+        this.showEdit = false
+      
     }
     onSubmit() {
         this.productForm.removeControl('id');
         this.productForm.removeControl('danhmuc');
-
         this.sanphamService.postSanpham(this.productForm.value).subscribe();
         alert('tạo thành công');
         this.resetForm();
@@ -147,17 +158,16 @@ export class SanphamComponent implements AfterViewInit, OnInit {
         }
     }
     ngOnInit(): void {
-        this.danhmucService.getDanhmuc().subscribe((res) => {
+        this.danhmucService.getDanhmuc().subscribe();
+        this.danhmucService.danhmuc$.subscribe((res) => {
             return (this.danhmuc = res);
-        });
+        })
         this.sanphamService.getSanpham().subscribe();
         this.sanphamService.sanpham$.subscribe((res) => {
             res?.forEach((v) => {
-                v.TenDM = this.danhmuc.find((x) => x.id == v.idDM)?.name;
+                v.TenDM = this.danhmuc?.find((x) => x.id == v.idDM)?.name;
             });
             if (res) {
-                console.log(res);
-                
                 this.dataSource = new MatTableDataSource(res);
             }
             this.dataSource.paginator = this.paginator;
@@ -187,14 +197,13 @@ export class SanphamComponent implements AfterViewInit, OnInit {
                 )
             )
             .subscribe((fileUploads) => {
-                // this.fileUploads = fileUploads.reverse();
-                // console.log(fileUploads);
+                
                 return fileUploads;
             });
-        this.uploadService._thumb$.subscribe((res) => {
-            if (res) {
-                return this.productForm.get('image').setValue(res);
-            }
-        });
+            this.uploadService._thumb$.subscribe((res) => {
+                if (res) {
+                    return this.productForm.get('image').setValue(res);
+                }
+            });
     }
 }

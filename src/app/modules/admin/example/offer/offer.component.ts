@@ -38,6 +38,7 @@ export class OfferComponent implements AfterViewInit, OnInit {
     percentage = 0;
     danhmuc: any;
     showEdit = false;
+    showSubmit = false;
     dataSource: MatTableDataSource<Offer>;
     showFiller = false;
     @ViewChild(MatPaginator) paginator: MatPaginator;
@@ -71,6 +72,7 @@ export class OfferComponent implements AfterViewInit, OnInit {
         this.offerForm.get('idP').setValue(item.id);
     }
     getOfferchitiet() {
+        this.showSubmit = false
         this.offService.getofferchitiet(this.selectID).subscribe((res) => {
             this.offerForm.get('idP').setValue(res.idP);
             let tenProduct = this.products.find((x) => x.id == res.idP)?.name;
@@ -86,13 +88,16 @@ export class OfferComponent implements AfterViewInit, OnInit {
     deleteOffer() {
         this.offService.deleteoffer(this.selectID).subscribe();
         this.resetForm();
+        this.offerForm.removeControl('tenProduct');
+
     }
     updateOffer() {
         this.offerForm.addControl('id', new FormControl(this.selectID));
         this.offerForm.get('id').setValue(this.selectID);
-        this.offerForm.removeControl('tenProduct');
         this.offService.updateoffer(this.offerForm.value).subscribe();
         this.resetForm();
+        this.offerForm.removeControl('tenProduct');
+
         this.ngOnInit();
     }
 
@@ -105,8 +110,11 @@ export class OfferComponent implements AfterViewInit, OnInit {
         }
     }
     resetForm() {
+        this.showSubmit = true
+        this.showEdit = false
         this.offerForm = this.fb.group({
             idP: [0],
+            tenProduct: [''],
             vertical: [''],
             geo: [''],
             target: [''],

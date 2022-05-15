@@ -3,66 +3,86 @@
     {
       "name": "Da dầu và da mụn",
       "image": "",
-      "parentId": 0,
+      "parentId": 3,
       "id": 1,
-      "img": ""
+      "img": "",
+      "danhmucCha": "ssssssss"
     },
     {
       "name": "saaaaaaa",
       "image": "",
-      "parentId": 0,
-      "id": 2
+      "parentId": 3,
+      "id": 2,
+      "danhmucCha": "ssssssss",
+      "img": ""
     },
     {
       "name": "ssssssss",
       "image": "",
-      "parentId": 0,
-      "id": 3
+      "parentId": 1,
+      "id": 3,
+      "danhmucCha": "Da dầu và da mụn",
+      "img": ""
     }
   ],
   "sanpham": [
     {
-      "name": "DNA Sharyn",
-      "des": "Phù hợp da dầu da mun",
-      "status": "",
-      "slug": "dna",
-      "price": "2000000",
-      "image": "https://firebasestorage.googleapis.com/v0/b/sharyn.appspot.com/o/files%2F4.png?alt=media&token=0a906604-5fa3-49c9-a3f3-f379ce8bf5c5",
-      "idDM": 1,
-      "id": 1,
-      "danhmuc": "Da dầu và da mụn"
-    },
-    {
-      "name": "sssssssss",
-      "des": "",
+      "name": "saas",
+      "des": "aaaaaaaa",
       "status": "",
       "slug": "",
-      "price": 0,
-      "image": "",
-      "idDM": 1,
-      "id": 2
+      "price": "1000000000",
+      "image": "https://firebasestorage.googleapis.com/v0/b/sharyn.appspot.com/o/files%2FMaster%20th%E1%BA%A9m%20m%E1%BB%B9.png?alt=media&token=8263b3ca-639f-493d-a31f-f39b61f85cf5",
+      "idDM": 3,
+      "id": 2,
+      "danhmuc": "ssssssss"
     }
   ],
+  "landingpage": [
+    {
+      "idOffer": 2,
+      "name": "aaaa",
+      "link": "sssss",
+      "loaiLD": "Langding Page",
+      "tenPD": "saas",
+      "image": "",
+      "id": 1
+    }
+  ],
+  "donhang": [
+    {
+      "id": 1,
+      "pub": "abc",
+      "hovaten": "nguyen van a",
+      "phone": "012345678",
+      "TenSP": "abaaba",
+      "trangthai": 1,
+      "price": "200000",
+      "soluong": "1",
+      "idUser":1
+    }
+  ],
+  "donhangchitiet": [],
   "offer": [
     {
-      "idP": 1,
-      "vertical": "abaaa",
-      "geo": "sssss",
-      "target": "sssss",
-      "promotion": "2000000",
-      "payout": "200000000",
-      "id": 1
+      "idP": 2,
+      "vertical": "dna sharyn",
+      "geo": "adad",
+      "target": "adad",
+      "promotion": "2000",
+      "payout": "2000",
+      "id": 2
     }
   ],
   "flow": [
     {
-      "idOffer": 1,
-      "name": "cường",
-      "landingpage": "1",
+      "idOffer": 2,
+      "name": "aaaa",
+      "landingpage": "aaaa",
       "traffic": "instagram",
-      "link": "",
-      "code": "a358f23e",
-      "createAt": "2022-4-29 9:21:28",
+      "link": "sssss#46c69a5c",
+      "code": "46c69a5c",
+      "createAt": "2022-5-4 11:33:1",
       "id": 1
     }
   ]

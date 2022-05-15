@@ -23,6 +23,8 @@ export class DanhmucComponent implements AfterViewInit, OnInit {
     currentFileUpload?: FileUpload;
     percentage = 0;
     showEdit = false;
+    showSubmit = false;
+
     dataSource: MatTableDataSource<Danhmuc>;
     showFiller = false;
     @ViewChild(MatPaginator) paginator: MatPaginator;
@@ -40,9 +42,7 @@ export class DanhmucComponent implements AfterViewInit, OnInit {
         // Assign the data to the data source for the table to render
     }
 
-    ngAfterViewInit(): void {
-       
-    }
+    ngAfterViewInit(): void {}
     selectId(id) {
         this.selectID = id;
         this.showEdit = true;
@@ -55,33 +55,34 @@ export class DanhmucComponent implements AfterViewInit, OnInit {
         this.danhmucForm.get('parentId').setValue(item.id);
     }
     getDanhmucchitiet() {
-        this.danhmucService
+        this.showSubmit = false
+        if(this.selectID){
+            this.danhmucService
             .getDanhmucchitiet(this.selectID)
             .subscribe((res) => {
-              
                 this.danhmucForm.get('name').setValue(res.name);
-                if (res.parentId) {
-                    this.danhmucForm.get('parentId').setValue(res.parentId);
-                    let danhmucparent = this.danhmuc.filter((x) => {
-                        return x.id == res.parentId;
-                    });
-                    this.danhmucForm.addControl('danhmucCha', new FormControl(''));
-
-                    this.danhmucForm.get('danhmucCha').setValue(danhmucparent[0].name);
-
-
-                }
+                this.danhmucForm.get('parentId').setValue(res.parentId);
+                let danhmucparent = this.danhmuc.find((x) => {
+                    return x.id == res.parentId;
+                });
+                this.danhmucForm.get('danhmucCha').setValue(danhmucparent?.name);
             });
+        }
     }
     deleteDanhmuc() {
         this.danhmucService.deleteDanhmuc(this.selectID).subscribe();
+        this.danhmucForm.removeControl('danhmucCha');
+
         this.resetForm();
     }
     updateDanhmuc() {
         this.danhmucForm.addControl('id', new FormControl(this.selectID));
         this.danhmucForm.get('id').setValue(this.selectID);
         this.danhmucService.updateDanhmuc(this.danhmucForm.value).subscribe();
+
         this.resetForm();
+        this.danhmucForm.removeControl('danhmucCha');
+
         this.ngOnInit();
     }
 
@@ -94,6 +95,8 @@ export class DanhmucComponent implements AfterViewInit, OnInit {
         }
     }
     resetForm() {
+        this.showSubmit = true
+        this.showEdit = false
         this.danhmucForm = this.fb.group({
             name: [''],
             image: [''],
@@ -102,6 +105,8 @@ export class DanhmucComponent implements AfterViewInit, OnInit {
     }
     onSubmit() {
         this.danhmucForm.removeControl('id');
+        this.danhmucForm.removeControl('danhmucCha');
+
         this.danhmucService.postDanhmuc(this.danhmucForm.value).subscribe();
         alert('tạo thành công');
         this.resetForm();
@@ -130,7 +135,6 @@ export class DanhmucComponent implements AfterViewInit, OnInit {
     ngOnInit(): void {
         this.danhmucService.getDanhmuc().subscribe();
         this.danhmucService.danhmuc$.subscribe((res) => {
-            
             this.dataSource = new MatTableDataSource(res);
             this.dataSource.paginator = this.paginator;
             this.dataSource.sort = this.sort;
@@ -139,6 +143,7 @@ export class DanhmucComponent implements AfterViewInit, OnInit {
         this.danhmucForm = this.fb.group({
             name: [''],
             parentId: [0],
+            danhmucCha: [''],
             img: [''],
         });
 

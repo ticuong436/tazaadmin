@@ -17,7 +17,7 @@
                         appearance="fill"
                     >
                         <span matPrefix>Offers</span>
-                        <mat-select [formControlName]="'tenProduct'">
+                        <mat-select [formControlName]="'TenSP'">
                             <mat-option
                                 [value]="item.TenSP"
                                 *ngFor="let item of offers; let i = index"
@@ -45,13 +45,12 @@
                     >
                         <span matPrefix>Landing Page</span>
                         <mat-select [formControlName]="'landingpage'">
-                            <mat-option value="1">1</mat-option>
-                            <!-- <mat-option
+                            <mat-option
                             [value]="item.name"
-                            *ngFor="let item of products; let i=index"
-                            (click)="onSelect(item)"
+                            *ngFor="let item of landingpage; let i=index"
+                            (click)="onSelectLink(item)"
                             >{{ item.name ? item.name : "" }}</mat-option
-                        > -->
+                        >
                         </mat-select>
                     </mat-form-field>
                     <mat-form-field
@@ -76,13 +75,15 @@
                             class="btn btn-success bg-green-500 px-4 py-1 text-white rounded-2xl"
                             (click)="drawer.toggle() && onSubmit()"
                             [disabled]="!flowForm.valid"
+                            *ngIf="showSubmit"
+
                         >
                             Submit
                         </button>
 
                         <button
                             type="update"
-                            class="btn bg-blue-500 px-4 py-1 text-white rounded-2xl mx-10"
+                            class="btn bg-blue-500 px-4 py-1 text-white rounded-2xl mr-10"
                             (click)="drawer.toggle() && updateFlow()"
                             [ngClass]="{ hidden: !showEdit }"
                         >
@@ -101,7 +102,8 @@
                 </form>
                 <button
                     class="absolute bg-gray-100 px-2 hover:bg-gray-300 py-1 rounded-full top-4 right-4"
-                    (click)="drawer.toggle() && !showEdit"
+                    (click)="drawer.toggle() && showSubmit = false"
+
                 >
                     X
                 </button>

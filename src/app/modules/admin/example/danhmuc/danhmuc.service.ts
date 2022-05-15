@@ -91,7 +91,7 @@ export class DanhmucService {
             map((upadatedanhmuc) => {
   
                 // Find the index of the updated tag
-                const index = danhmucs.findIndex(item => item.id === item.id);
+                const index = danhmucs.findIndex(item => item.id === data.id);
   
                 // Update the tag
                 danhmucs[index] = data;

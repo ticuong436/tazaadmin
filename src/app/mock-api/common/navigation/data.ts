@@ -31,6 +31,20 @@ export const defaultNavigation: FuseNavigationItem[] = [
         icon : 'heroicons_outline:chart-pie',
         link : 'admin/flow'
     },
+    {
+        id   : 'ladingpage',
+        title: 'Landing Page',
+        type : 'basic',
+        icon : 'heroicons_outline:chart-pie',
+        link : 'admin/landingpage'
+    },
+     {
+        id   : 'donhang',
+        title: 'Đơn Hàng',
+        type : 'basic',
+        icon : 'heroicons_outline:chart-pie',
+        link : 'admin/donhang'
+    },
 ];
 export const compactNavigation: FuseNavigationItem[] = [
     {
